@@ -1,0 +1,2 @@
+source /satassd/01_FW/99_test_code/07-usbd_phy_cts/usb_hs_phy_cts/build/gdbinit/symbols
+source /satassd/01_FW/99_test_code/07-usbd_phy_cts/usb_hs_phy_cts/build/gdbinit/connect

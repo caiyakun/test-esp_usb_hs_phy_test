@@ -1,0 +1,5 @@
+source "/satassd/01_FW/99_test_code/07-usbd_phy_cts/esp-idf_usbd_phy_cts/components/bootloader/Kconfig.projbuild"
+source "/satassd/01_FW/99_test_code/07-usbd_phy_cts/esp-idf_usbd_phy_cts/components/esp_app_format/Kconfig.projbuild"
+source "/satassd/01_FW/99_test_code/07-usbd_phy_cts/esp-idf_usbd_phy_cts/components/esp_rom/Kconfig.projbuild"
+source "/satassd/01_FW/99_test_code/07-usbd_phy_cts/esp-idf_usbd_phy_cts/components/esptool_py/Kconfig.projbuild"
+source "/satassd/01_FW/99_test_code/07-usbd_phy_cts/esp-idf_usbd_phy_cts/components/partition_table/Kconfig.projbuild"

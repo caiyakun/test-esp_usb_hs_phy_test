@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/satassd/01_FW/99_test_code/07-usbd_phy_cts/usb_hs_phy_cts/build/CMakeFiles/bootloader"
+		},
+		{
+			"file" : "/satassd/01_FW/99_test_code/07-usbd_phy_cts/usb_hs_phy_cts/build/CMakeFiles/bootloader.rule"
+		},
+		{
+			"file" : "/satassd/01_FW/99_test_code/07-usbd_phy_cts/usb_hs_phy_cts/build/CMakeFiles/bootloader-complete.rule"
+		},
+		{
+			"file" : "/satassd/01_FW/99_test_code/07-usbd_phy_cts/usb_hs_phy_cts/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+		},
+		{
+			"file" : "/satassd/01_FW/99_test_code/07-usbd_phy_cts/usb_hs_phy_cts/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+		},
+		{
+			"file" : "/satassd/01_FW/99_test_code/07-usbd_phy_cts/usb_hs_phy_cts/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+		},
+		{
+			"file" : "/satassd/01_FW/99_test_code/07-usbd_phy_cts/usb_hs_phy_cts/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+		},
+		{
+			"file" : "/satassd/01_FW/99_test_code/07-usbd_phy_cts/usb_hs_phy_cts/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+		},
+		{
+			"file" : "/satassd/01_FW/99_test_code/07-usbd_phy_cts/usb_hs_phy_cts/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+		},
+		{
+			"file" : "/satassd/01_FW/99_test_code/07-usbd_phy_cts/usb_hs_phy_cts/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"bootloader"
+		],
+		"name" : "bootloader"
+	}
+}
