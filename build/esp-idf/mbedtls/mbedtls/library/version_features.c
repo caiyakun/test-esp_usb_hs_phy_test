@@ -1,1 +1,0 @@
-/satassd/01_FW/99_test_code/07-usbd_phy_cts/esp-idf_usbd_phy_cts/components/mbedtls/mbedtls/library/version_features.c

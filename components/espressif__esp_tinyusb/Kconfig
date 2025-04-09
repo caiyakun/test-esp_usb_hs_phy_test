@@ -5,6 +5,12 @@ menu "TinyUSB Stack"
         range 0 3
         help
             Specify verbosity of TinyUSB log output.
+    
+    config USB_TEST_MODE
+        bool "USB_TEST_MODE Support"
+        default y
+        help
+            Indicate the usb test mode support or not.
 
     choice TINYUSB_RHPORT
         prompt "USB Peripheral"

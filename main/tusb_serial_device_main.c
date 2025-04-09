@@ -78,6 +78,12 @@ void app_main(void)
     app_message_t msg;
 
     ESP_LOGI(TAG, "USB initialization");
+
+    #if CONFIG_USB_TEST_MODE
+    ESP_LOGI(TAG, "USB test mode enabled !!!");
+    #endif
+
+
     const tinyusb_config_t tusb_cfg = {
         .device_descriptor = NULL,
         .string_descriptor = NULL,

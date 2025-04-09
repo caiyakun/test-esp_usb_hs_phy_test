@@ -143,6 +143,12 @@ typedef struct {
 tu_static usbd_device_t _usbd_dev;
 static volatile uint8_t _usbd_queued_setup;
 
+
+char feature_Arrayselector[3][20] = {
+        "feat_edpt_halt",
+        "feat_remote_wakeup",
+        "feat_test_mode"
+};
 //--------------------------------------------------------------------+
 // Class Driver
 //--------------------------------------------------------------------+
@@ -821,31 +827,39 @@ static bool process_control_request(uint8_t rhport, tusb_control_request_t const
         break;
 
         case TUSB_REQ_SET_FEATURE:
-          switch(p_request->wValue) {
-            case TUSB_REQ_FEATURE_REMOTE_WAKEUP:
-              TU_LOG_USBD("    Enable Remote Wakeup\r\n");
-              // Host may enable remote wake up before suspending especially HID device
-              _usbd_dev.remote_wakeup_en = true;
-              tud_control_status(rhport, p_request);
-            break;
+#if CONFIG_USB_TEST_MODE 
+        { 
+          uint8_t const feature_selector = (uint8_t) p_request->wValue;
+          // uint8_t const test_selector = tu_u16_high(p_request->wIndex);
+          uint8_t const wIndex_l = tu_u16_low(p_request->wIndex);
 
-            #if CFG_TUD_TEST_MODE
-            case TUSB_REQ_FEATURE_TEST_MODE: {
-              // Only handle the test mode if supported and valid
-              TU_VERIFY(0 == tu_u16_low(p_request->wIndex));
+          TU_VERIFY((TUSB_REQ_FEATURE_TEST_MODE == feature_selector) || (TUSB_REQ_FEATURE_REMOTE_WAKEUP == feature_selector));
+          printf("set feature req: %s\n",feature_Arrayselector[feature_selector]);
 
-              uint8_t const selector = tu_u16_high(p_request->wIndex);
-              TU_VERIFY(TUSB_FEATURE_TEST_J <= selector && selector <= TUSB_FEATURE_TEST_FORCE_ENABLE);
+          if(TUSB_REQ_FEATURE_TEST_MODE == feature_selector)
+          {
+            TU_VERIFY(0 == wIndex_l);
+            // The transition to test mode must not happen until after the status stage of the request
+            tud_control_status(rhport, p_request); 
+            // Note:implement diff test in dcd_edpt0_status_complete() to make sure that status stage is done firstly
+          }else{
 
-              usbd_control_set_complete_callback(process_test_mode_cb);
-              tud_control_status(rhport, p_request);
-              break;
-            }
-            #endif /* CFG_TUD_TEST_MODE */
-
-            // Stall unsupported feature selector
-            default: return false;
+            // Host may enable remote wake up before suspending especially HID device
+            _usbd_dev.remote_wakeup_en = true;   
+            tud_control_status(rhport, p_request);
+    
           }
+        }
+#else
+          // Only support remote wakeup for device feature
+          TU_VERIFY(TUSB_REQ_FEATURE_REMOTE_WAKEUP == p_request->wValue);
+
+          TU_LOG(USBD_DBG, "    Enable Remote Wakeup\r\n");
+
+          // Host may enable remote wake up before suspending especially HID device
+          _usbd_dev.remote_wakeup_en = true;
+          tud_control_status(rhport, p_request);
+#endif
         break;
 
         case TUSB_REQ_CLEAR_FEATURE:

@@ -177,6 +177,16 @@ typedef enum {
   TUSB_REQ_FEATURE_TEST_MODE     = 2
 } tusb_request_feature_selector_t;
 
+typedef enum
+{
+  TUSB_TEST_MODE_RESERVED        = 0,
+  TUSB_TEST_MODE_TEST_J          = 1,
+  TUSB_TEST_MODE_TEST_K          = 2,
+  TUSB_TEST_MODE_TEST_SE0_NAK    = 3,
+  TUSB_TEST_MODE_TEST_PACKET     = 4,
+  TUSB_TEST_MODE_TEST_FORCE_EN   = 5,
+}tusb_test_mode_selector_t;
+
 typedef enum {
   TUSB_REQ_TYPE_STANDARD = 0,
   TUSB_REQ_TYPE_CLASS,

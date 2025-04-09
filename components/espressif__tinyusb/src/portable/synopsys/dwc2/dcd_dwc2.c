@@ -28,6 +28,7 @@
  */
 
 #include "tusb_option.h"
+#include "soc/usb_dwc_struct.h"
 
 #if CFG_TUD_ENABLED && defined(TUP_USBIP_DWC2)
 
@@ -475,6 +476,119 @@ void dcd_remote_wakeup(uint8_t rhport) {
 
   dwc2->dctl &= ~DCTL_RWUSIG;
 }
+
+#if CONFIG_USB_TEST_MODE // USB  test mode
+
+// static char testmodeArray[6][20] = {"reserved", "test_j","test_k","test_se0_nak","test_packet","test_force_on"};
+
+static void dcd_test_mode_test_j(void)
+{
+  USB_DWC_HS.dctl_reg.val |= TUSB_TEST_MODE_TEST_J << 4; //USB_TSTCTL_S
+}
+
+static void dcd_test_mode_test_k(void)
+{
+  USB_DWC_HS.dctl_reg.val |= TUSB_TEST_MODE_TEST_K << 4;
+}
+
+static void dcd_test_mode_test_se0_nak(void)
+{
+  USB_DWC_HS.dctl_reg.val |= TUSB_TEST_MODE_TEST_SE0_NAK << 4;
+}
+
+static void dcd_test_mode_test_packet(void)
+{
+  USB_DWC_HS.dctl_reg.val |= TUSB_TEST_MODE_TEST_PACKET << 4;
+}
+
+static void dcd_test_mode_test_force_en(void)
+{
+  USB_DWC_HS.dctl_reg.val |= TUSB_TEST_MODE_TEST_FORCE_EN << 4;
+}
+
+void dcd_set_feature_test_mode(uint8_t rhport, uint8_t index_h)
+{
+  (void)rhport;
+  
+  tusb_test_mode_selector_t test_mode_selector = (tusb_test_mode_selector_t)(index_h);
+
+  switch (test_mode_selector)
+  {
+    case TUSB_TEST_MODE_TEST_J:
+      dcd_test_mode_test_j();
+
+      printf("usbdev test mode test_j = %d Done !\n",test_mode_selector);
+
+      // the power to the device must be cycled to exit test mode
+      vTaskDelay(portMAX_DELAY);
+      break;
+
+    case TUSB_TEST_MODE_TEST_K:
+      dcd_test_mode_test_k();
+
+      printf("usbdev test mode test_k = %d Done !\n",test_mode_selector);
+
+      // the power to the device must be cycled to exit test mode
+      vTaskDelay(portMAX_DELAY);
+      break;
+
+    case TUSB_TEST_MODE_TEST_SE0_NAK:
+      dcd_test_mode_test_se0_nak();
+
+      printf("usbdev test mode test_se0_nak = %d Done !\n",test_mode_selector);
+
+      // the power to the device must be cycled to exit test mode
+      vTaskDelay(portMAX_DELAY);
+      break;
+
+    case TUSB_TEST_MODE_TEST_PACKET:
+      dcd_test_mode_test_packet();
+    
+      printf("usbdev test mode test_packet = %d Done !\n",test_mode_selector);
+
+      // the power to the device must be cycled to exit test mode
+      vTaskDelay(portMAX_DELAY);
+      break;   
+
+    case TUSB_TEST_MODE_TEST_FORCE_EN:
+      dcd_test_mode_test_force_en();
+
+      printf("usbdev test mode test_force_en = %d Done !\n",test_mode_selector);
+
+      // the power to the device must be cycled to exit test mode
+      vTaskDelay(portMAX_DELAY);
+      break;   
+
+    default:
+      break;
+  }
+}
+#endif
+
+
+// Invoked when a control transfer's status stage is complete.
+// May help DCD to prepare for next control transfer, this API is optional.
+void dcd_edpt0_status_complete(uint8_t rhport, tusb_control_request_t const * request)
+{
+  (void) rhport;
+
+  if (request->bmRequestType_bit.recipient == TUSB_REQ_RCPT_DEVICE &&
+      request->bmRequestType_bit.type == TUSB_REQ_TYPE_STANDARD &&
+      request->bRequest == TUSB_REQ_SET_FEATURE)
+  {
+    printf("set feature complete process!\n");
+#if CONFIG_USB_TEST_MODE // USB TEST MODE
+    uint8_t const test_selector = tu_u16_high(request->wIndex);
+    dcd_set_feature_test_mode(rhport, test_selector);
+#endif
+  }
+
+  // Just finished status stage, prepare for next setup packet
+  // Note: we may already prepare setup when queueing the control status.
+  // but it has no harm to do it again here
+  // prepare_setup();
+}
+
 
 void dcd_connect(uint8_t rhport) {
   (void) rhport;

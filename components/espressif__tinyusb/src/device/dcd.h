@@ -125,6 +125,11 @@ void dcd_int_disable(uint8_t rhport);
 // Receive Set Address request, mcu port must also include status IN response
 void dcd_set_address(uint8_t rhport, uint8_t dev_addr);
 
+// for usb test mode
+#if CONFIG_USB_TEST_MODE
+void dcd_set_feature_test_mode(uint8_t rhport, uint8_t index_h);
+#endif
+
 // Wake up host
 void dcd_remote_wakeup(uint8_t rhport);
 
